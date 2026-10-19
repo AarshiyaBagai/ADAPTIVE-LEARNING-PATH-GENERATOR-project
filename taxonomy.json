@@ -1,0 +1,205 @@
+{
+ "skills": {
+  "python": {
+   "name": "Python",
+   "pre": [],
+   "kw": [
+    "python"
+   ]
+  },
+  "dsa": {
+   "name": "Data Structures & Algorithms",
+   "pre": [
+    "python"
+   ],
+   "kw": [
+    "data structure",
+    "data structures",
+    "algorithm",
+    "algorithms",
+    "dsa",
+    "leetcode"
+   ]
+  },
+  "oop": {
+   "name": "Object-Oriented Programming",
+   "pre": [
+    "python"
+   ],
+   "kw": [
+    "oop",
+    "object-oriented",
+    "object oriented",
+    "java",
+    "c++"
+   ]
+  },
+  "sql": {
+   "name": "SQL",
+   "pre": [],
+   "kw": [
+    "sql",
+    "mysql",
+    "postgres",
+    "postgresql",
+    "queries"
+   ]
+  },
+  "dbms": {
+   "name": "DBMS",
+   "pre": [
+    "sql"
+   ],
+   "kw": [
+    "dbms",
+    "database",
+    "databases",
+    "normalization",
+    "transactions"
+   ]
+  },
+  "os": {
+   "name": "Operating Systems",
+   "pre": [],
+   "kw": [
+    "operating system",
+    "operating systems",
+    "scheduling",
+    "threads"
+   ]
+  },
+  "net": {
+   "name": "Computer Networks",
+   "pre": [],
+   "kw": [
+    "network",
+    "networks",
+    "networking",
+    "tcp",
+    "http",
+    "dns"
+   ]
+  },
+  "git": {
+   "name": "Git & GitHub",
+   "pre": [],
+   "kw": [
+    "git",
+    "github",
+    "version control"
+   ]
+  },
+  "web": {
+   "name": "Web Fundamentals",
+   "pre": [],
+   "kw": [
+    "html",
+    "css",
+    "javascript",
+    "frontend",
+    "front-end",
+    "web development"
+   ]
+  },
+  "react": {
+   "name": "React",
+   "pre": [
+    "web"
+   ],
+   "kw": [
+    "react",
+    "reactjs",
+    "tailwind",
+    "redux"
+   ]
+  },
+  "stats": {
+   "name": "Statistics",
+   "pre": [],
+   "kw": [
+    "statistics",
+    "statistical",
+    "probability",
+    "hypothesis testing"
+   ]
+  },
+  "ml": {
+   "name": "Machine Learning",
+   "pre": [
+    "python",
+    "stats"
+   ],
+   "kw": [
+    "machine learning",
+    "ml",
+    "scikit-learn",
+    "sklearn",
+    "pytorch",
+    "tensorflow",
+    "model training"
+   ]
+  },
+  "comm": {
+   "name": "Communication",
+   "pre": [],
+   "kw": [
+    "communication",
+    "presentation",
+    "teamwork",
+    "collaboration",
+    "stakeholder"
+   ]
+  }
+ },
+ "roles": {
+  "ML Engineer": {
+   "desc": "Build and ship machine-learning models.",
+   "req": {
+    "python": 4,
+    "stats": 3,
+    "ml": 4,
+    "dsa": 3,
+    "git": 2
+   }
+  },
+  "Full-Stack Developer": {
+   "desc": "Build complete web applications, front to back.",
+   "req": {
+    "web": 4,
+    "react": 3,
+    "sql": 3,
+    "git": 3,
+    "dsa": 3
+   }
+  },
+  "Software Developer (SDE)": {
+   "desc": "Core software engineering and campus placement track.",
+   "req": {
+    "dsa": 4,
+    "oop": 4,
+    "dbms": 3,
+    "os": 3,
+    "python": 3,
+    "comm": 3
+   }
+  },
+  "Data Analyst": {
+   "desc": "Turn data into decisions with SQL, Python and statistics.",
+   "req": {
+    "sql": 4,
+    "python": 3,
+    "stats": 3,
+    "comm": 3
+   }
+  }
+ },
+ "days": [
+  "Mon eve",
+  "Tue eve",
+  "Wed eve",
+  "Thu eve",
+  "Fri eve",
+  "Sat morn",
+  "Sun eve"
+ ]
+}

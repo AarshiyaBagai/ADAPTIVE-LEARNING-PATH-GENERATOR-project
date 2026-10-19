@@ -1,0 +1,507 @@
+{
+ "people": [
+  {
+   "key": "u1",
+   "name": "Aarav Sharma",
+   "role": "student",
+   "year": 3,
+   "branch": "CSE",
+   "goal": "ML Engineer",
+   "skills": {
+    "python": 3,
+    "dsa": 2,
+    "sql": 2,
+    "stats": 1,
+    "git": 2,
+    "web": 2,
+    "comm": 3,
+    "oop": 2
+   },
+   "status": {
+    "python": "assessed",
+    "dsa": "self",
+    "sql": "self",
+    "stats": "self",
+    "git": "self",
+    "web": "self",
+    "comm": "self",
+    "oop": "self"
+   },
+   "interests": [
+    "AI",
+    "Healthcare",
+    "Data"
+   ],
+   "avail": [
+    "Mon eve",
+    "Wed eve",
+    "Sat morn"
+   ],
+   "rep": 35
+  },
+  {
+   "key": "u2",
+   "name": "Priya Verma",
+   "role": "senior",
+   "year": 4,
+   "branch": "CSE",
+   "goal": "ML Engineer",
+   "skills": {
+    "python": 5,
+    "ml": 4,
+    "stats": 4,
+    "dsa": 4,
+    "git": 4,
+    "comm": 4
+   },
+   "status": {
+    "python": "faculty",
+    "ml": "assessed",
+    "stats": "assessed",
+    "dsa": "assessed",
+    "git": "faculty",
+    "comm": "self"
+   },
+   "interests": [
+    "AI",
+    "Healthcare"
+   ],
+   "avail": [
+    "Wed eve",
+    "Sat morn",
+    "Sun eve"
+   ],
+   "rep": 210
+  },
+  {
+   "key": "u3",
+   "name": "Rohan Gupta",
+   "role": "senior",
+   "year": 4,
+   "branch": "CSE",
+   "goal": "Software Developer (SDE)",
+   "skills": {
+    "dsa": 5,
+    "oop": 4,
+    "dbms": 4,
+    "os": 4,
+    "python": 4,
+    "comm": 4
+   },
+   "status": {
+    "dsa": "faculty",
+    "oop": "assessed",
+    "dbms": "assessed",
+    "os": "assessed",
+    "python": "assessed",
+    "comm": "self"
+   },
+   "interests": [
+    "Systems",
+    "Competitive"
+   ],
+   "avail": [
+    "Mon eve",
+    "Fri eve"
+   ],
+   "rep": 175
+  },
+  {
+   "key": "u4",
+   "name": "Ananya Iyer",
+   "role": "senior",
+   "year": 4,
+   "branch": "IT",
+   "goal": "Full-Stack Developer",
+   "skills": {
+    "web": 5,
+    "react": 5,
+    "sql": 4,
+    "git": 5,
+    "python": 3
+   },
+   "status": {
+    "web": "faculty",
+    "react": "assessed",
+    "sql": "assessed",
+    "git": "faculty",
+    "python": "self"
+   },
+   "interests": [
+    "Web",
+    "Healthcare"
+   ],
+   "avail": [
+    "Tue eve",
+    "Sat morn"
+   ],
+   "rep": 190
+  },
+  {
+   "key": "u5",
+   "name": "Neha Singh",
+   "role": "student",
+   "year": 3,
+   "branch": "CSE",
+   "goal": "Full-Stack Developer",
+   "skills": {
+    "python": 2,
+    "web": 4,
+    "react": 3,
+    "ml": 1,
+    "sql": 2,
+    "git": 3
+   },
+   "status": {},
+   "interests": [
+    "AI",
+    "Web"
+   ],
+   "avail": [
+    "Mon eve",
+    "Wed eve"
+   ],
+   "rep": 40
+  },
+  {
+   "key": "u6",
+   "name": "Karan Mehta",
+   "role": "student",
+   "year": 3,
+   "branch": "CSE",
+   "goal": "ML Engineer",
+   "skills": {
+    "python": 4,
+    "ml": 3,
+    "stats": 3,
+    "dsa": 3,
+    "git": 3
+   },
+   "status": {},
+   "interests": [
+    "AI",
+    "Data"
+   ],
+   "avail": [
+    "Wed eve",
+    "Sun eve"
+   ],
+   "rep": 65
+  },
+  {
+   "key": "u7",
+   "name": "Ishita Rao",
+   "role": "student",
+   "year": 2,
+   "branch": "IT",
+   "goal": "Data Analyst",
+   "skills": {
+    "web": 3,
+    "react": 2,
+    "sql": 3,
+    "comm": 4,
+    "stats": 2
+   },
+   "status": {},
+   "interests": [
+    "Web",
+    "Healthcare",
+    "Data"
+   ],
+   "avail": [
+    "Mon eve",
+    "Sat morn"
+   ],
+   "rep": 22
+  },
+  {
+   "key": "u8",
+   "name": "Vikram Patel",
+   "role": "student",
+   "year": 3,
+   "branch": "CSE",
+   "goal": "Software Developer (SDE)",
+   "skills": {
+    "dsa": 4,
+    "oop": 3,
+    "python": 3,
+    "sql": 3
+   },
+   "status": {},
+   "interests": [
+    "Systems",
+    "AI"
+   ],
+   "avail": [
+    "Tue eve",
+    "Wed eve"
+   ],
+   "rep": 48
+  },
+  {
+   "key": "f1",
+   "name": "Dr. S. Mehta",
+   "role": "faculty",
+   "year": null,
+   "branch": "CSE",
+   "goal": null,
+   "skills": {},
+   "status": {},
+   "interests": [],
+   "avail": [],
+   "rep": 0
+  }
+ ],
+ "resources": [
+  {
+   "id": "r1",
+   "title": "Python for ML: 2-hour crash course",
+   "type": "Video",
+   "skill": "python",
+   "topic": "Python basics",
+   "by": "u2",
+   "style": "Visual",
+   "rating": 4.7,
+   "votes": 38,
+   "users": 22,
+   "gain": 2.6
+  },
+  {
+   "id": "r2",
+   "title": "Statistics cheat-sheet: distributions & hypothesis tests",
+   "type": "Notes",
+   "skill": "stats",
+   "topic": "Probability",
+   "by": "u2",
+   "style": "Read/Write",
+   "rating": 4.5,
+   "votes": 29,
+   "users": 17,
+   "gain": 3.1
+  },
+  {
+   "id": "r3",
+   "title": "Scikit-learn workflow notebook",
+   "type": "Practice",
+   "skill": "ml",
+   "topic": "Model training",
+   "by": "u2",
+   "style": "Kinesthetic",
+   "rating": 4.6,
+   "votes": 21,
+   "users": 11,
+   "gain": 2.2
+  },
+  {
+   "id": "r4",
+   "title": "DSA patterns: arrays, two pointers, sliding window",
+   "type": "Notes",
+   "skill": "dsa",
+   "topic": "Arrays",
+   "by": "u3",
+   "style": "Read/Write",
+   "rating": 4.8,
+   "votes": 56,
+   "users": 41,
+   "gain": 2.9
+  },
+  {
+   "id": "r5",
+   "title": "Binary trees visualised",
+   "type": "Video",
+   "skill": "dsa",
+   "topic": "Trees",
+   "by": "u3",
+   "style": "Visual",
+   "rating": 4.4,
+   "votes": 33,
+   "users": 27,
+   "gain": 1.8
+  },
+  {
+   "id": "r6",
+   "title": "DBMS normalization: solved examples",
+   "type": "Notes",
+   "skill": "dbms",
+   "topic": "Normalization",
+   "by": "u3",
+   "style": "Read/Write",
+   "rating": 4.3,
+   "votes": 19,
+   "users": 14,
+   "gain": 1.4
+  },
+  {
+   "id": "r7",
+   "title": "OS scheduling algorithms: worked problems",
+   "type": "Practice",
+   "skill": "os",
+   "topic": "CPU scheduling",
+   "by": "u3",
+   "style": "Kinesthetic",
+   "rating": 4.5,
+   "votes": 24,
+   "users": 18,
+   "gain": 2.4
+  },
+  {
+   "id": "r8",
+   "title": "React from zero: components, props, state",
+   "type": "Video",
+   "skill": "react",
+   "topic": "React basics",
+   "by": "u4",
+   "style": "Visual",
+   "rating": 4.7,
+   "votes": 44,
+   "users": 25,
+   "gain": 2.5
+  },
+  {
+   "id": "r9",
+   "title": "SQL joins practice set (40 queries)",
+   "type": "Practice",
+   "skill": "sql",
+   "topic": "Joins",
+   "by": "u4",
+   "style": "Kinesthetic",
+   "rating": 4.6,
+   "votes": 31,
+   "users": 29,
+   "gain": 3.3
+  },
+  {
+   "id": "r10",
+   "title": "Git & GitHub in one afternoon",
+   "type": "Article",
+   "skill": "git",
+   "topic": "Version control",
+   "by": "u4",
+   "style": "Read/Write",
+   "rating": 4.2,
+   "votes": 17,
+   "users": 20,
+   "gain": 1.1
+  },
+  {
+   "id": "r11",
+   "title": "Image processing: spatial filters, solved",
+   "type": "Notes",
+   "skill": "python",
+   "topic": "Median filter",
+   "by": "u2",
+   "style": "Read/Write",
+   "rating": 4.4,
+   "votes": 15,
+   "users": 9,
+   "gain": 2
+  },
+  {
+   "id": "r12",
+   "title": "Probability past papers with solutions",
+   "type": "Practice",
+   "skill": "stats",
+   "topic": "Probability",
+   "by": "f1",
+   "style": "Read/Write",
+   "rating": 4.9,
+   "votes": 62,
+   "users": 48,
+   "gain": 3.6
+  },
+  {
+   "id": "r13",
+   "title": "Communication skills: explaining your project in 2 minutes",
+   "type": "Article",
+   "skill": "comm",
+   "topic": "Interviews",
+   "by": "u4",
+   "style": "Read/Write",
+   "rating": 4.1,
+   "votes": 12,
+   "users": 13,
+   "gain": 1.5
+  },
+  {
+   "id": "r14",
+   "title": "Computer networks: TCP/IP in diagrams",
+   "type": "Video",
+   "skill": "net",
+   "topic": "TCP/IP",
+   "by": "u3",
+   "style": "Visual",
+   "rating": 4.3,
+   "votes": 16,
+   "users": 10,
+   "gain": 1.7
+  }
+ ],
+ "questions": [
+  {
+   "id": "q1",
+   "title": "How do we apply a median filter to a 3×3 matrix?",
+   "body": "I get the idea of sorting neighbours but I am not sure what happens at the borders.",
+   "subject": "Image Processing",
+   "topic": "Spatial filters",
+   "by": "u5",
+   "when": "2 days ago",
+   "answers": [
+    {
+     "id": "a1",
+     "by": "u2",
+     "text": "Collect the 9 values in the window, sort them and take the middle one (the 5th). Replace the centre pixel with it. At borders, pad the image by replicating edge pixels, or skip border pixels.",
+     "votes": 7,
+     "accepted": true,
+     "verified": true
+    },
+    {
+     "id": "a2",
+     "by": "u6",
+     "text": "Same as the averaging filter but you use the median instead of the mean, which is why it removes salt-and-pepper noise well.",
+     "votes": 3,
+     "accepted": false,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "id": "q2",
+   "title": "Difference between a process and a thread?",
+   "body": "Interview question I keep fumbling.",
+   "subject": "Operating Systems",
+   "topic": "Processes",
+   "by": "u7",
+   "when": "1 day ago",
+   "answers": [
+    {
+     "id": "a3",
+     "by": "u3",
+     "text": "A process has its own address space; threads inside a process share code, heap and open files but each has its own stack and registers. Thread switches are cheaper than process switches.",
+     "votes": 5,
+     "accepted": false,
+     "verified": false
+    }
+   ]
+  },
+  {
+   "id": "q3",
+   "title": "When should I use a LEFT JOIN instead of INNER JOIN?",
+   "body": "I keep losing rows from my result.",
+   "subject": "DBMS",
+   "topic": "Joins",
+   "by": "u1",
+   "when": "5 hours ago",
+   "answers": []
+  },
+  {
+   "id": "q4",
+   "title": "Probability: two dice, P(sum is 8 given at least one is a 6)?",
+   "body": "Stuck on conditional probability here.",
+   "subject": "Probability & Stats",
+   "topic": "Conditional probability",
+   "by": "u1",
+   "when": "1 hour ago",
+   "answers": []
+  }
+ ]
+}
