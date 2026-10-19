@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ALPG – Adaptive Learning Pathway Generator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="logo">A</span><div><b>ALPG</b><small>Adaptive Learning Pathway</small></div></div>
+      <nav id="nav"></nav>
+      <div class="side-foot">
+        <button class="btn ghost small" data-act="logout">Log out</button>
+        <button class="btn ghost small" data-act="resetData">Reset demo data</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <button class="menu-btn" data-act="toggleMenu" aria-label="Menu">☰</button>
+        <div id="crumb" class="crumb"></div>
+        <div class="who" id="who"></div>
+      </header>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="api.js"></script>
+  <script src="logic.js"></script>
+  <script src="pages.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
