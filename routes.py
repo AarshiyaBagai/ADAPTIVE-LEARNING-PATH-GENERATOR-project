@@ -40,7 +40,8 @@ ROUTES = []  # (method, compiled regex, auth level, handler)
 
 def route(method: str, pattern: str, auth: str = "user"):
     """auth: 'public' | 'user' (any signed-in account) | 'faculty'."""
-    regex = pattern.replace("{id}", r"(?P<id>\d+)").replace("{key}", r"(?P<key>[a-z]{1,20})")
+    regex = (pattern.replace("{id}", r"(?P<id>\d+)").replace("{key}", r"(?P<key>[a-z]{1,20})")
+             .replace("{slug}", r"(?P<slug>[a-z0-9_-]{1,40})"))
     compiled = re.compile("^" + regex + "$")
 
     def deco(fn):

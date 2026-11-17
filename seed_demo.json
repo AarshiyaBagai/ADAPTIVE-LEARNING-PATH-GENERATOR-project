@@ -37,7 +37,30 @@
     "Wed eve",
     "Sat morn"
    ],
-   "rep": 35
+   "rep": 35,
+   "projects": 1,
+   "grades": [
+    [
+     "Data Structures",
+     74
+    ],
+    [
+     "DBMS",
+     81
+    ],
+    [
+     "Probability & Stats",
+     58
+    ],
+    [
+     "Operating Systems",
+     69
+    ],
+    [
+     "Python Programming",
+     88
+    ]
+   ]
   },
   {
    "key": "u2",
@@ -71,7 +94,10 @@
     "Sat morn",
     "Sun eve"
    ],
-   "rep": 210
+   "rep": 210,
+   "projects": 5,
+   "rating": 4.8,
+   "mentees": 6
   },
   {
    "key": "u3",
@@ -104,7 +130,10 @@
     "Mon eve",
     "Fri eve"
    ],
-   "rep": 175
+   "rep": 175,
+   "projects": 4,
+   "rating": 4.6,
+   "mentees": 9
   },
   {
    "key": "u4",
@@ -135,7 +164,10 @@
     "Tue eve",
     "Sat morn"
    ],
-   "rep": 190
+   "rep": 190,
+   "projects": 6,
+   "rating": 4.7,
+   "mentees": 5
   },
   {
    "key": "u5",
@@ -161,7 +193,30 @@
     "Mon eve",
     "Wed eve"
    ],
-   "rep": 40
+   "rep": 40,
+   "projects": 2,
+   "grades": [
+    [
+     "Data Structures",
+     62
+    ],
+    [
+     "DBMS",
+     70
+    ],
+    [
+     "Probability & Stats",
+     55
+    ],
+    [
+     "Operating Systems",
+     60
+    ],
+    [
+     "Python Programming",
+     79
+    ]
+   ]
   },
   {
    "key": "u6",
@@ -186,7 +241,30 @@
     "Wed eve",
     "Sun eve"
    ],
-   "rep": 65
+   "rep": 65,
+   "projects": 3,
+   "grades": [
+    [
+     "Data Structures",
+     80
+    ],
+    [
+     "DBMS",
+     77
+    ],
+    [
+     "Probability & Stats",
+     72
+    ],
+    [
+     "Operating Systems",
+     64
+    ],
+    [
+     "Python Programming",
+     90
+    ]
+   ]
   },
   {
    "key": "u7",
@@ -212,7 +290,30 @@
     "Mon eve",
     "Sat morn"
    ],
-   "rep": 22
+   "rep": 22,
+   "projects": 1,
+   "grades": [
+    [
+     "Data Structures",
+     58
+    ],
+    [
+     "DBMS",
+     84
+    ],
+    [
+     "Probability & Stats",
+     61
+    ],
+    [
+     "Operating Systems",
+     72
+    ],
+    [
+     "Python Programming",
+     70
+    ]
+   ]
   },
   {
    "key": "u8",
@@ -236,7 +337,30 @@
     "Tue eve",
     "Wed eve"
    ],
-   "rep": 48
+   "rep": 48,
+   "projects": 2,
+   "grades": [
+    [
+     "Data Structures",
+     85
+    ],
+    [
+     "DBMS",
+     68
+    ],
+    [
+     "Probability & Stats",
+     66
+    ],
+    [
+     "Operating Systems",
+     59
+    ],
+    [
+     "Python Programming",
+     82
+    ]
+   ]
   },
   {
    "key": "f1",
@@ -249,7 +373,8 @@
    "status": {},
    "interests": [],
    "avail": [],
-   "rep": 0
+   "rep": 0,
+   "projects": 0
   }
  ],
  "resources": [
@@ -502,6 +627,40 @@
    "by": "u1",
    "when": "1 hour ago",
    "answers": []
+  }
+ ],
+ "projects": [
+  {
+   "title": "Campus Health Chatbot",
+   "desc": "A chatbot that answers student health-centre queries and books slots.",
+   "owner": "u5",
+   "needs": [
+    "python",
+    "ml",
+    "web"
+   ],
+   "tags": [
+    "AI",
+    "Healthcare"
+   ],
+   "size": 4,
+   "timeline": "8 weeks"
+  },
+  {
+   "title": "Placement Tracker Dashboard",
+   "desc": "Dashboard that tracks applications, deadlines and interview rounds.",
+   "owner": "u7",
+   "needs": [
+    "react",
+    "sql",
+    "web"
+   ],
+   "tags": [
+    "Web",
+    "Data"
+   ],
+   "size": 3,
+   "timeline": "6 weeks"
   }
  ]
 }

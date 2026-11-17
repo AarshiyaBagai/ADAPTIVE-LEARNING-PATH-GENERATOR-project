@@ -111,6 +111,125 @@ CREATE TABLE IF NOT EXISTS answer_votes (
   user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   PRIMARY KEY (answer_id, user_id)
 );
+
+-- ---------- phase 2: mentorship, projects, prep, planner ----------
+CREATE TABLE IF NOT EXISTS grades (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  subject TEXT NOT NULL,
+  score   INTEGER NOT NULL CHECK (score BETWEEN 0 AND 100),
+  PRIMARY KEY (user_id, subject)
+);
+CREATE TABLE IF NOT EXISTS mentor_profiles (
+  user_id      INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  base_rating  REAL NOT NULL DEFAULT 0,
+  base_mentees INTEGER NOT NULL DEFAULT 0,
+  projects     INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS student_profiles (
+  user_id  INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  projects INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS mentor_requests (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  mentor_id  INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  topic      TEXT NOT NULL,
+  slot       TEXT NOT NULL,
+  message    TEXT NOT NULL DEFAULT '',
+  status     TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','declined')),
+  pre        INTEGER CHECK (pre BETWEEN 0 AND 10),
+  post       INTEGER CHECK (post BETWEEN 0 AND 10),
+  created_at TEXT NOT NULL,
+  decided_at TEXT
+);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_mentor_pending ON mentor_requests(student_id, mentor_id) WHERE status = 'pending';
+CREATE TABLE IF NOT EXISTS projects (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  owner_id   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title      TEXT NOT NULL,
+  descr      TEXT NOT NULL,
+  needs      TEXT NOT NULL,
+  tags       TEXT NOT NULL DEFAULT '[]',
+  size       INTEGER NOT NULL CHECK (size BETWEEN 2 AND 6),
+  timeline   TEXT NOT NULL DEFAULT '',
+  status     TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open','full')),
+  created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS project_members (
+  project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  joined_at  TEXT NOT NULL,
+  PRIMARY KEY (project_id, user_id)
+);
+-- kind 'join' = the student asked, the owner decides; kind 'invite' = the owner asked, the student decides
+CREATE TABLE IF NOT EXISTS project_requests (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind       TEXT NOT NULL CHECK (kind IN ('join','invite')),
+  status     TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','declined')),
+  created_at TEXT NOT NULL,
+  decided_at TEXT
+);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_project_pending ON project_requests(project_id, user_id) WHERE status = 'pending';
+CREATE TABLE IF NOT EXISTS aptitude_sessions (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  level      INTEGER NOT NULL,
+  asked      TEXT NOT NULL DEFAULT '[]',
+  current_q  TEXT,
+  log        TEXT NOT NULL DEFAULT '[]',
+  correct    INTEGER NOT NULL DEFAULT 0,
+  done       INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL
+);
+-- first attempt at each technical question is the one that counts
+CREATE TABLE IF NOT EXISTS tech_attempts (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  qid     TEXT NOT NULL,
+  skill   TEXT NOT NULL,
+  ok      INTEGER NOT NULL,
+  PRIMARY KEY (user_id, qid)
+);
+CREATE TABLE IF NOT EXISTS coding_done (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  cid     TEXT NOT NULL,
+  PRIMARY KEY (user_id, cid)
+);
+CREATE TABLE IF NOT EXISTS interview_answers (
+  id       INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id  INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  category TEXT NOT NULL,
+  qidx     INTEGER NOT NULL,
+  text     TEXT NOT NULL,
+  score    INTEGER NOT NULL,
+  created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS tasks (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  text       TEXT NOT NULL,
+  done       INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS study_groups (
+  id           TEXT PRIMARY KEY,
+  name         TEXT NOT NULL,
+  goal         TEXT NOT NULL,
+  skill        TEXT NOT NULL,
+  base_members INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS group_members (
+  group_id TEXT NOT NULL REFERENCES study_groups(id) ON DELETE CASCADE,
+  user_id  INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  PRIMARY KEY (group_id, user_id)
+);
+-- one row per user per active day; the streak is computed from these
+CREATE TABLE IF NOT EXISTS activity (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  day     TEXT NOT NULL,
+  PRIMARY KEY (user_id, day)
+);
 """
 
 
@@ -132,6 +251,10 @@ def init_db(path: str) -> None:
     try:
         conn.execute("PRAGMA journal_mode = WAL")
         conn.executescript(SCHEMA)
+        with open(os.path.join(_HERE, "content.json"), encoding="utf-8") as f:
+            for g in json.load(f)["GROUPS"]:
+                conn.execute("INSERT OR IGNORE INTO study_groups (id, name, goal, skill, base_members) VALUES (?,?,?,?,?)",
+                             (g["id"], g["name"], g["goal"], g["skill"], g["members"]))
         conn.commit()
     finally:
         conn.close()
@@ -169,6 +292,13 @@ def seed_demo(path: str) -> bool:
                 (email, pw, p["role"], p["name"], p["year"], p["branch"], p["goal"],
                  json.dumps(p["interests"]), json.dumps(p["avail"]), p["rep"], ts))
             ids[p["key"]] = cur.lastrowid
+            if p["role"] == "senior":
+                conn.execute("INSERT INTO mentor_profiles (user_id, base_rating, base_mentees, projects) VALUES (?,?,?,?)",
+                             (cur.lastrowid, p.get("rating", 0), p.get("mentees", 0), p.get("projects", 0)))
+            elif p["role"] == "student":
+                conn.execute("INSERT INTO student_profiles (user_id, projects) VALUES (?,?)", (cur.lastrowid, p.get("projects", 0)))
+            for subj, sc in p.get("grades", []):
+                conn.execute("INSERT INTO grades (user_id, subject, score) VALUES (?,?,?)", (cur.lastrowid, subj, sc))
             for skill, level in p["skills"].items():
                 conn.execute("INSERT INTO user_skills (user_id, skill, level, status, updated_at) VALUES (?,?,?,?,?)",
                              (cur.lastrowid, skill, level, p["status"].get(skill, "self"), ts))
@@ -187,6 +317,14 @@ def seed_demo(path: str) -> bool:
                     "INSERT INTO answers (question_id, user_id, text, votes, accepted, verified, created_at)"
                     " VALUES (?,?,?,?,?,?,?)",
                     (cur.lastrowid, ids[a["by"]], a["text"], a["votes"], int(a["accepted"]), int(a["verified"]), ts))
+        for pr in seed.get("projects", []):
+            cur = conn.execute(
+                "INSERT INTO projects (owner_id, title, descr, needs, tags, size, timeline, created_at) VALUES (?,?,?,?,?,?,?,?)",
+                (ids[pr["owner"]], pr["title"], pr["desc"], json.dumps(pr["needs"]), json.dumps(pr["tags"]),
+                 pr["size"], pr["timeline"], ts))
+            conn.execute("INSERT INTO project_members (project_id, user_id, joined_at) VALUES (?,?,?)",
+                         (cur.lastrowid, ids[pr["owner"]], ts))
+        conn.execute("INSERT INTO group_members (group_id, user_id) VALUES ('g1', ?)", (ids["u1"],))
         conn.commit()
         return True
     finally:

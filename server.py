@@ -16,6 +16,9 @@ from urllib.parse import parse_qsl, unquote, urlsplit
 
 import db
 import routes
+import routes_social  # noqa: F401  (importing a routes_* module registers its routes)
+import routes_prep  # noqa: F401
+import routes_planner  # noqa: F401
 import security
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -34,7 +37,7 @@ class Handler(BaseHTTPRequestHandler):
     def _cors(self):
         self.send_header("Access-Control-Allow-Origin", os.environ.get("ALPG_CORS_ORIGIN", "*"))
         self.send_header("Access-Control-Allow-Headers", "Authorization, Content-Type")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         self.send_header("Access-Control-Max-Age", "600")
 
     def _send(self, status, body: bytes, ctype, extra=None, api=False):
@@ -103,8 +106,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self): self._handle()
     def do_PUT(self): self._handle()
 
-    def do_DELETE(self):
-        self._send(405, b"Method not allowed", "text/plain; charset=utf-8")
+    def do_DELETE(self): self._handle()
 
     def do_OPTIONS(self):
         self.send_response(204)

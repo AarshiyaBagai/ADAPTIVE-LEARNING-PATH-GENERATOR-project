@@ -154,3 +154,145 @@ def gap_relevance(levels: dict, role: str) -> dict:
 
 def resource_rank_score(relevance: float, gain: float) -> float:
     return 0.7 * relevance + 0.3 * min(1.0, (gain or 0) / 4)
+
+
+# ======================= content banks (quizzes, interview, project ideas) =======================
+with open(os.path.join(_HERE, "content.json"), encoding="utf-8") as _f:
+    CONTENT = json.load(_f)
+
+APT = {q["id"]: q for q in CONTENT["APT"]}
+TECH = {q["id"]: q for q in CONTENT["TECH"]}
+INTERVIEW = CONTENT["INTERVIEW"]
+PROJECT_IDEAS = CONTENT["PROJECT_IDEAS"]
+GROUPS = CONTENT["GROUPS"]
+CODING = {c["id"]: c for c in CONTENT["CODING"]}
+
+APT_START_LEVEL = 2
+APT_QUESTIONS = 8
+VERIFY_MIN_ATTEMPTS = 3
+VERIFY_MIN_ACCURACY = 0.7
+VERIFY_LEVEL = 3          # a quiz can vouch for level 3 at most
+MIN_GROUP_SIZE = 5        # faculty analytics hide any group smaller than this
+
+
+def mentor_match(mentor: dict, student: dict) -> dict:
+    """score = 0.5*K (gaps the mentor covers) + 0.25*A (shared free slots) + 0.25*I (goal and interest fit)."""
+    gs = [g for g in gap_list(student["skills"], student["goal"]) if g["gap"] > 0]
+    tot = sum(g["gap"] for g in gs) or 1
+    K, why = 0.0, []
+    for g in gs:
+        ml = mentor["skills"].get(g["skill"], 0)
+        if ml >= g["required"]:
+            K += g["gap"]
+            why.append(SKILLS[g["skill"]]["name"])
+        elif ml > g["current"]:
+            K += g["gap"] * 0.5
+    K /= tot
+    overlap = [d for d in mentor["avail"] if d in student["avail"]]
+    A = min(1.0, len(overlap) / 2)
+    shared = [i for i in mentor["interests"] if i in student["interests"]]
+    I = (0.6 if mentor["goal"] == student["goal"] else 0.0) + min(0.4, 0.2 * len(shared))
+    return {"score": round(0.5 * K + 0.25 * A + 0.25 * I, 4), "skills": round(K, 3), "availability": round(A, 3),
+            "fit": round(I, 3), "overlap": overlap, "covers": why}
+
+
+def team_score(cand: dict, proj: dict, owner_avail: list) -> dict:
+    """S = 0.45*K + 0.20*E + 0.20*A + 0.15*I (K skill fit, E experience, A shared slots, I interest)."""
+    needs = proj["needs"]
+    K = sum(min(1.0, cand["skills"].get(k, 0) / 4) for k in needs) / len(needs)
+    E = min(1.0, (cand.get("projects") or 0) / 4)
+    A = min(1.0, len([d for d in cand["avail"] if d in owner_avail]) / 2)
+    tags = proj["tags"]
+    I = min(1.0, len([i for i in cand["interests"] if i in tags]) / max(1, min(2, len(tags)))) if tags else 0.0
+    return {"score": round(0.45 * K + 0.2 * E + 0.2 * A + 0.15 * I, 4), "skills": round(K, 3),
+            "experience": round(E, 3), "availability": round(A, 3), "interest": round(I, 3)}
+
+
+def rank_candidates(cands: list, proj: dict, owner_avail: list) -> list:
+    out = [dict(c, **{"match": team_score(c, proj, owner_avail)}) for c in cands]
+    return sorted(out, key=lambda x: (-x["match"]["score"], x["id"]))
+
+
+def suggest_team(ranked: list, proj: dict, member_skills: list) -> dict:
+    """Greedy pick: each seat goes to the candidate with the best score plus 0.25 per newly covered skill."""
+    needs = proj["needs"]
+    covered = {k for k in needs if any(ms.get(k, 0) >= 3 for ms in member_skills)}
+    pool, team = list(ranked), []
+    free = proj["size"] - len(member_skills)
+    while len(team) < free and pool:
+        best, bv = None, -1.0
+        for x in pool:
+            gain = sum(1 for k in needs if k not in covered and x["skills"].get(k, 0) >= 3)
+            v = x["match"]["score"] + 0.25 * gain
+            if v > bv:
+                best, bv = x, v
+        team.append(best)
+        pool.remove(best)
+        covered |= {k for k in needs if best["skills"].get(k, 0) >= 3}
+    return {"team": team, "covered": sorted(covered), "missing": [k for k in needs if k not in covered]}
+
+
+def project_ideas(levels: dict, role: str) -> list:
+    gaps = {g["skill"] for g in gap_list(levels, role) if g["gap"] > 0}
+    out = []
+    for idea in PROJECT_IDEAS:
+        ks = list(idea["skills"])
+        stretch = [k for k in ks if levels.get(k, 0) < idea["skills"][k]]
+        jump = max(idea["skills"][k] - levels.get(k, 0) for k in ks)
+        builds = [k for k in ks if k in gaps]
+        score = len(builds) * 2 - max(0, jump - 1) * 2 + (0.5 if jump <= 0 else 0)
+        out.append({**idea, "stretch": stretch, "builds": builds, "max_jump": jump, "fits": jump <= 1, "score": score})
+    return sorted(out, key=lambda x: -x["score"])
+
+
+def apt_next(asked: list, level: int, limit: int = APT_QUESTIONS):
+    """Next question id: the unasked one whose difficulty is closest to the current level. None when finished."""
+    pool = [q for qid, q in APT.items() if qid not in asked]
+    if not pool or len(asked) >= limit:
+        return None
+    pool.sort(key=lambda q: abs(q["lvl"] - level))  # stable sort: bank order breaks ties
+    return pool[0]["id"]
+
+
+def apt_level_after(level: int, correct: bool) -> int:
+    return max(1, min(3, level + (1 if correct else -1)))
+
+
+def weak_topics(log: list) -> list:
+    t = {}
+    for l in log:
+        v = t.setdefault(l["topic"], {"a": 0, "c": 0})
+        v["a"] += 1
+        v["c"] += 1 if l["ok"] else 0
+    rows = [{"topic": k, "accuracy": round(v["c"] / v["a"], 3), "asked": v["a"]} for k, v in t.items()]
+    return sorted(rows, key=lambda r: (r["accuracy"], r["topic"]))
+
+
+CLARITY_RE = re.compile(r"(for example|for instance|e\.g\.|because|so that|which means|\d)")
+
+
+def score_answer(text: str, kw: list) -> dict:
+    """0.5*keyword coverage + 0.3*length (45 words = full) + 0.2*clarity (an example or a reason). Rule-based."""
+    words = text.split()
+    t = text.lower()
+    hit = [k for k in kw if k in t]
+    missed = [k for k in kw if k not in t]
+    cov = min(1.0, len(hit) / max(3, -(-len(kw) // 2)))
+    ln = min(1.0, len(words) / 45)
+    clar = 1.0 if CLARITY_RE.search(t) else 0.3
+    return {"score": _round_half_up((0.5 * cov + 0.3 * ln + 0.2 * clar) * 100), "hit": hit, "missed": missed,
+            "words": len(words), "coverage": round(cov, 3), "length": round(ln, 3), "clarity": clar}
+
+
+def streak_from_days(days: list, today: str) -> int:
+    """Consecutive active days ending today (or yesterday, so the streak is not lost before you study today)."""
+    from datetime import date, timedelta
+    have = set(days)
+    d = date.fromisoformat(today)
+    if d.isoformat() not in have:
+        d -= timedelta(days=1)
+    n = 0
+    while d.isoformat() in have:
+        n += 1
+        d -= timedelta(days=1)
+    return n
